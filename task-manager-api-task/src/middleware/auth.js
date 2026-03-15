@@ -1,7 +1,6 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
-module.exports = function (req, res, next) {
-
+export default function (req, res, next) {
   const token = req.header("Authorization");
 
   if (!token) {
@@ -9,14 +8,13 @@ module.exports = function (req, res, next) {
   }
 
   try {
-
-    const decoded = jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
+    // Ensure the token format is "Bearer <token>"
+    const bearerToken = token.startsWith("Bearer ") ? token.split(" ")[1] : token;
+    const decoded = jwt.verify(bearerToken, process.env.JWT_SECRET);
 
     req.user = decoded;
-
     next();
-
   } catch (err) {
     res.status(401).json({ message: "Token is not valid" });
   }
-};
+}

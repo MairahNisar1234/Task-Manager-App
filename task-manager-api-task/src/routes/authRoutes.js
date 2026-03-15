@@ -1,49 +1,9 @@
-const express = require("express");
+import express from "express";
+import { registerUser, loginUser } from "../controllers/authController.js";
+
 const router = express.Router();
-const { register, login } = require("../controllers/authController");
 
-/**
- * @openapi
- * /api/users/register:
- *   post:
- *     summary: Register a new user
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       201:
- *         description: User registered
- */
-router.post("/register", register);
+router.post("/register", registerUser);
+router.post("/login", loginUser);
 
-/**
- * @openapi
- * /api/users/login:
- *   post:
- *     summary: Login and get JWT
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       200:
- *         description: Token returned
- */
-router.post("/login", login);
-
-module.exports = router;
+export default router;
